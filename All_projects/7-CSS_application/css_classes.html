@@ -1,0 +1,81 @@
+<html>
+    <style>
+        .c1 {
+            background-color: rgb(25, 202, 193);
+            color: rgb(4, 7, 56);
+            height: 30px;
+            width: 300px;    
+        }
+
+        tr[class*='IT']{
+        background-color:rgb(121, 48, 136);
+        
+    }
+    tr[class*='Finance']{
+        background-color:rgb(181, 181, 241);
+        
+    }
+    tr[class*='HR']{
+        background-color:rgb(219, 219, 236);
+        
+    }
+    </style>
+    <script>
+        function load(){
+            document.getElementsByClassName("th1").addEventListener('mouseenter',function(){
+                //alert("one")
+                this.className = 'c1';
+            },false);
+
+            document.getElementById("tr1").addEventListener('mouseleave',function(){
+                //alert("one")
+                this.className = '';
+            },false);
+        }
+        window.onload = load;
+
+
+    </script>
+    <table border="1" >
+        <tr class="Th1" >    
+            <th>Employee Id</th>
+            <th>Employee Name</th>    
+          <th>Department</th>
+        </tr>
+        <tr class="IT">
+            <td>101</td>
+            <td>John</td>
+          <td>IT</td>
+          
+        </tr>
+        <tr class="HR">
+            <td>102</td>
+            <td>John</td>
+          <td>HR</td>
+        </tr>
+        <tr class="Finance">
+            <td>103</td>
+            <td>John A</td>
+          <td>Finance</td>
+          </tr>
+
+          <tr class="IT">
+            <td>104</td>
+            <td>John</td>
+          <td>IT</td>
+          </tr>
+
+          <tr class="IT">
+            <td>105</td>
+            <td>John E</td>
+          <td>IT</td>
+          </tr>
+          <tr class="IT">
+            <td>106</td>
+            <td>John F </td>
+          <td>HR</td>
+        </tr>
+      </table>
+
+
+</html>

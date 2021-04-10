@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./employeeFormLogic.js"></script>
+    <script src="./validate.js"></script>
+    <script>
+        var empLogic;
+        var employees;
+        var validate;
+        var flg;
+        function presenter(){
+            
+            empLogic = new EmployeeLogic();
+            validate = new ValidateForm(); 
+            var depts = empLogic.departments;
+
+            emp_detail=empLogic.employess;
+           //alert(depts);
+           var flg="add";
+            loadList(depts);
+            empList(emp_detail);
+            document.getElementById('btnclear').addEventListener('click',clearInputs,false);
+            employees = empLogic.getEmployees();
+            document.getElementById('dvemps').innerHTML = JSON.stringify(employees);
+            
+            document.getElementById('btnsave').addEventListener('click',save,false);
+            
+            document.getElementById('data_add').addEventListener('click',add_data,false);
+            document.getElementById('data_mod').addEventListener('click',mod_data,false);
+            document.getElementById('emp_no1').addEventListener('change',show_details,false);
+
+            
+            document.getElementById('show_data').addEventListener('click',show_data,false);
+            
+            document.getElementById('txteno').addEventListener('keyup', function(){
+                // pass the value entered in input element 
+                validate.checkNumeric(this.value)
+            },false);
+
+            document.getElementById('txtsal').addEventListener('keyup', function(){
+                // pass the value entered in input element 
+                validate.checkNumeric(this.value)
+            },false);
+
+        };
+
+        // function to load all departments
+        function loadList(depts){
+            var opt;
+            for(var i=0; i< depts.length; i++) {
+                opt+= '<option value="'+depts[i]+ '">'+ depts[i] +'</option>';    
+            }
+            // generate options dynamically
+            document.getElementById('lstdname').innerHTML = opt;
+        }
+
+        function empList()
+        {
+            var opt1;
+             //var flg= "mod";
+             
+             
+            //var employess;
+            //alert(emp_detail);
+            for(var p in emp_detail) {
+                //alert(emp_detail[p].EmpNo)
+                opt1+= '<option value="'+emp_detail[p].EmpNo+ '">'+ emp_detail[p].EmpName+"-"+emp_detail[p].EmpNo+'</option>'; 
+            }
+            document.getElementById('emp_no1').innerHTML = opt1;
+
+        }
+
+        //
+        function show_details()
+        {
+            document.getElementById('flg').value=2
+           emp_no= document.getElementById('emp_no1').value
+           for(p in emp_detail)
+           {
+            if(emp_detail[p].EmpNo == emp_no)
+            {
+                document.getElementById('txteno').value=emp_detail[p].EmpNo
+                document.getElementById('txtename').value=emp_detail[p].EmpName
+                document.getElementById('lstdname').value=emp_detail[p].DeptName
+                document.getElementById('txtsal').value=emp_detail[p].Salary
+
+                
+                
+
+            }
+
+           }
+            //alert(emp_no);
+        }
+
+        // reading all inputes and clearijg them
+        function clearInputs(){
+            var inputs =  document.getElementsByTagName('input');
+            for(var i=0; i< inputs.length; i++) {
+                inputs[i].value = "";
+            }
+        }
+
+        // the save oepration
+        function save(){
+            // Object Literal
+           var flg = document.getElementById('flg').value
+           //alert(flg)
+           
+           if(flg==2)
+           {
+            emp_no1=document.getElementById('emp_no1').value
+            txtename=document.getElementById('txtename').value
+            dname=document.getElementById('lstdname').value
+            sal=document.getElementById('txtsal').value
+            employees = empLogic.modEmployee(emp_no1,txtename,dname,sal);
+            
+            
+           }
+           else
+           {
+            emp_no=parseInt(document.getElementById('txteno').value)
+           emp_name= document.getElementById('txtename').value
+            validate.validation_fields(emp_no,emp_name)
+            var emp = {
+                EmpNo: parseInt(document.getElementById('txteno').value),
+                EmpName:  document.getElementById('txtename').value,
+                DeptName: document.getElementById('lstdname').value,
+                Salary:parseInt(document.getElementById('txtsal').value)
+            };
+            employees = empLogic.addEmployee(emp); 
+          }
+            document.getElementById('dvemps').innerHTML = JSON.stringify(employees);
+            document.getElementById('txteno').value=''
+            document.getElementById('txtename').value=''
+            document.getElementById('lstdname').value=''
+            document.getElementById('txtsal').value=''
+
+        }
+
+        //show data 
+        function show_data()
+        { 
+           // var emp_data = empLogic.employess;
+        
+           var rows='';
+           var td_val='';
+           //var properties=[];
+            properties = Object.keys(emp_detail[0]);
+            length=properties.length;
+            for(i=0;i<length;i++)
+            {
+                td_val +='<th>'+properties[i]+'</th>'
+
+            }
+
+            rows +='<table border="1" id="customers">'
+
+            rows +='<tr>'+td_val+'<th>Delete</th></tr>';
+            for(var p in employees) {
+            console.log('Propety Name = ' + p+ '  Value name = ' + employees[p].EmpName);
+           
+            
+            rows += '<tr><td>'+employees[p].EmpNo+'</td><td>'+employees[p].EmpName+'</td><td>'+employees[p].DeptName+'</td><td>'+employees[p].Salary+'</td><td><button id="del" onClick="delete_rec('+employees[p].EmpNo+')" class="button button5">Delete</buttion></td></tr>';
+            rows +='<br>'
+           
+
+            }
+            rows +='</table>'
+            document.getElementById('disp_data').innerHTML= rows
+
+
+        }
+        function delete_rec(val)
+        {
+            //val_inp= val
+            //alert(val_inp)
+            console.log(employees);
+           //var val = 102
+           
+           employees = empLogic.delEmployee(val);
+            
+            document.getElementById('dvemps').innerHTML = JSON.stringify(employees);
+        
+        }
+
+        function mod_data()
+        {
+            document.getElementById('sel_empno').style.display = "block";   
+                document.getElementById('txteno').value=''
+                document.getElementById('txtename').value=''
+                document.getElementById('lstdname').value=''
+                document.getElementById('txtsal').value=''
+        }
+
+        function add_data()
+        {
+            document.getElementById('flg').value=1
+            document.getElementById('sel_empno').style.display = "none"; 
+            document.getElementById('txteno').value=''
+            document.getElementById('txtename').value=''
+            document.getElementById('lstdname').value=''
+            document.getElementById('txtsal').value=''
+        }
+
+        
+        window.onload = presenter;
+        
+    </script>
+    <style>
+        #customers {
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+        }
+
+        #customers td, #customers th {
+        border: 1px solid #ddd;
+        padding: 8px;
+        }
+
+        #customers tr:nth-child(even){background-color: #f2f2f2;}
+
+        #customers tr:hover {background-color: #ddd;}
+
+        #customers th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        background-color: #0e586b;
+        color: white;
+        }
+
+        input[type=text], select {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        }
+        div {
+        border-radius: 5px;
+        background-color: #f2f2f2;
+        padding: 20px;
+        }
+
+        .button {
+        background-color: #4CAF50; /* Green */
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 12px;
+        }
+        .button1 {background-color: #4CAF50;} /* Green */
+        .button2 {background-color: #008CBA;} /* Blue */
+        .button4 {background-color: #e7e7e7; color: black;} /* Gray */
+        .button5 {background-color: #0e586b;} /* Black */
+
+
+    </style>
+</head>
+<body>
+    <h2>The Employee Information System</h2>
+    <div>
+    <table>
+        <tbody>
+            <thead>
+                <tr>
+                    <td>
+                    </td>
+                    <td>
+                        <button id="data_add" class='button1 button'>Add</button>
+                    
+                        <button id="data_mod" class='button2 button'>Modify</button>
+                        <button id="show_data" class='button4 button'>Show Data</button>
+                    </td>
+
+                <td>
+                    
+                </td>
+                
+            
+            </tr>
+            <tr></tr>
+            </thead>
+            <tr id="sel_empno" style="display:none;">
+                <td>Select Emp Name</td>
+                <td></td>
+                <td>
+                    <select  id="emp_no1" >
+                        <option value="1">A</option>
+                        <option value="2">B</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>EmpNo</td>
+                <td>
+                    <input type="hidden" id="flg">
+                    <input type="text" id="txteno">
+                </td>
+            </tr>
+            <tr>
+                <td>EmpName</td>
+                <td>
+                    <input type="text" id="txtename">
+                </td>
+            </tr>
+            <tr>
+                <td>DeptName</td>
+                <td>
+                    <select  id="lstdname">
+                        <option value="1">A</option>
+                        <option value="2">B</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Salary</td>
+                <td>
+                    <input type="text" id="txtsal">
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td></td>
+                <td>
+                    <button id="btnclear" class='button4 button'>Clear</button>
+                
+                    <button id="btnsave" class='button1 button'>Save</button>
+                </td>
+                
+            </tr>
+        </tfoot>
+    </table>
+    <hr>
+    <div id="dvemps"></div>
+
+    <div id="disp_data"></div>
+</div>
+</body>
+
+</html>

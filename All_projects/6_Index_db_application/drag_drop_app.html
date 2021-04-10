@@ -1,0 +1,171 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./drag_drop_indexdb.js"></script>
+    <script>
+        window.onload = function(){
+            
+            createDatabase();
+        
+       
+        product_tot=0
+        var tr_total = document.getElementsByTagName('tr');
+        //console.log(tr_total.length)
+
+        for(var i=0;i<tr_total.length;i++){
+           
+            
+            tr_total[i].addEventListener('dragstart', function(evt){
+               // console.log('aa')
+                        
+                        evt.dataTransfer.setData('Text', evt.target.id);
+                    },false);
+                }
+
+                var tarTable = document.getElementById("dvtar");
+                //console.log(evt.target.id)
+
+        //drop start
+        dvtar.addEventListener('drop',function(evt){
+            //console.log('bb')
+            
+            evt.preventDefault();
+            var elementData = evt.dataTransfer.getData("Text");
+            
+            //node=document.getElementById(elementData)
+            //let newClone = node.cloneNode(true)
+
+            var tr1 = document.getElementById(elementData);
+            document.getElementById("tbdy").appendChild(document.getElementById(elementData));
+
+            //append button
+            
+            var td = tr1.getElementsByTagName("td");
+            
+            val_add=td[5].innerHTML;
+            
+            product_tot = parseInt(product_tot) + parseInt(val_add)
+            console.log(product_tot);
+            document.getElementById("total").innerHTML=product_tot
+            console.log(document.getElementById("total").innerHTML)
+
+            var saveobj={
+                        "id":td[0].innerHTML,
+                        "ProductId":td[0].innerHTML,
+                        "ProductNM":td[1].innerHTML,
+                        "CategoryName": td[2].innerHTML,
+                        "Manufacturer": td[3].innerHTML,
+                        "Description": td[4].innerHTML,
+                        "Price": td[5].innerHTML
+                    };
+            saveData(saveobj)
+            
+     
+        },false);
+
+
+        dvtar.addEventListener('dragover',function(evt){
+                    // do not perform any other operations untill the drop has not takes place
+                    evt.preventDefault();
+                    
+                    
+                },false)
+
+    //Save Bill
+    purches.addEventListener('click',function(){
+        bill_val=0
+
+        bill_val=document.getElementById("total").innerHTML
+
+        savebill(bill_val)
+
+        },false)
+
+        };
+
+       
+    </script>
+
+   
+    
+</head>
+<body>
+    <div id="dvsrc">
+<table id="srcTable">
+        
+    <tr  id="th1">
+        <th>ProductId</th>
+        <th>Product Name</th>
+        <th>CategoryName</th>
+        <th>Manufacturer</th>
+        <th>Description</th>
+        <th >Price</th>
+  
+      </tr>
+    
+    <tr draggable="true" id="pr1">
+      <td>101</td>
+      <td>Laptop</td>
+      <td>Hardware</td>
+      <td>DELL</td>
+      <td>This is product from Dell</td>
+      <td >70000</td>
+
+    </tr>
+    <tr draggable="true" id="pr2">
+        <td>102</td>
+        <td>Mobile</td>
+        <td>Hardware</td>
+        <td>OnePlus</td>
+        <td>This is product from OnePlus</td>
+        <td id="price2">80000</td>
+    </tr>
+  </table>
+  </div>
+  <br>
+<br>
+  <!-- <div  id="dvtar" style="height:150px;width:500px;background-color: grey  ;"> </div> -->
+    <h2 >Shopping Cart</h2>
+    <div style="height:150px;width:600px;background-color: grey  ;" id="dvtar">
+  <table >
+      <thead>
+        <tr  id="th1" >
+            <th>ProductId</th>
+            <th>Product Name</th>
+            <th>CategoryName</th>
+            <th>Manufacturer</th>
+            <th>Description</th>
+            <th >Price</th>
+            <th >Remove</th>
+      
+          </tr>
+      </thead>
+      <tbody id="tbdy">
+    
+    </tbody>
+   
+  </table>
+</div>
+</div>
+<div>
+
+
+
+  </table>
+  <br>
+<div>
+    <span>Product total:</span> <span id="total" value=""></span>
+</div>
+<br>
+<div>
+    <button id="purches"> Purches Product</button>
+</div>
+<br><br>
+<div id="dvstatus"></div>
+</body>
+</html>

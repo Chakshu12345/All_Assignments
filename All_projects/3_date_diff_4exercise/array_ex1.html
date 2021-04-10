@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+   input[type=text] {
+  width: 30%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 3px solid #ccc;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+  outline: none;
+}
+
+input[type=text]:focus {
+  border: 3px solid #555;
+} 
+   .button {
+  background-color: #05243d; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+   
+   p {
+    width: 30%;
+  background-color: lightblue;
+}
+
+
+</style>
+<script>
+    function convert_positive(a)
+    {
+        if (a < 0) {
+            
+            a = a * -1;
+        }
+        return a;
+
+    }
+    function compare()
+    {
+        d1= document.getElementById("inputval1").value
+        d2= document.getElementById("inputval2").value
+
+        var dt1 = new Date(d1);
+        var dt2 = new Date(d2);
+
+        year1=dt1.getFullYear(); // get the year value form date
+        month1=dt1.getMonth(); // get the month starts from 0
+        date1=dt1.getDate();
+        //console.log(year1);
+
+        year2=dt2.getFullYear(); // get the year value form date
+        month2=dt2.getMonth(); // get the month starts from 0
+        date2=dt2.getDate();
+        //console.log(year2);
+
+        if(month1==0)
+        {
+            days_to_sub=0
+        }
+        if(month1==1)
+        {
+            days_to_sub=0+31
+        }
+        if(month1==2)
+        {
+            days_to_sub=0+31+28
+        }
+        if(month1==3)
+        {
+            days_to_sub=0+31+28+31
+        }
+        if(month1==4)
+        {
+            days_to_sub=0+31+28+31+30
+        }
+        if(month1==5)
+        {
+            days_to_sub=0+31+28+31+30+31
+        }
+        if(month1==6)
+        {
+            days_to_sub=0+31+28+31+30+31+30
+        }
+        if(month1==7)
+        {
+            days_to_sub=0+31+28+31+30+31+30+31
+        }
+        if(month1==8)
+        {
+            days_to_sub=0+31+28+31+30+31+30+31+31
+        }
+        if(month1==9)
+        {
+            days_to_sub=0+31+28+31+30+31+30+31+31+30
+        }
+        if(month1==10)
+        {
+            days_to_sub=0+31+28+31+30+31+30+31+31+30+31
+        }
+        if(month1==11)
+        {
+            days_to_sub=0+31+28+31+30+31+30+31+31+30+31+30
+        }
+
+
+
+        if(month2==0)
+        days_to_add=0
+        
+        if(month2==1)
+        days_to_add=0+31
+        
+        if(month2==2)
+            days_to_add=0+31+28
+            
+        if(month2==3)
+        days_to_add=0+31+28+31
+        
+
+        if(month2==4)
+        days_to_add=0+31+28+31+30
+        
+        if(month2==5)
+        days_to_add=0+31+28+31+30+31
+        
+        if(month2==6)
+        days_to_add=0+31+28+31+30+31+30
+        
+        if(month2==7)
+        days_to_add=0+31+28+31+30+31+30+31
+        
+        if(month2==8)
+        days_to_add=0+31+28+31+30+31+30+31+31
+
+        if(month2==9)
+        days_to_add=0+31+28+31+30+31+30+31+31+30
+        
+        if(month2==10)
+        days_to_add=0+31+28+31+30+31+30+31+31+30+31
+        
+        if(month2==11)
+        days_to_add=0+31+28+31+30+31+30+31+31+30+31+30
+    
+
+
+        
+
+
+        //if(year1 > year2)
+        {
+        tot_diff_days=0
+       // console.log(month1)
+        //console.log(days_to_sub)
+        if((0 == year1 % 4) && (0 != year1 % 100) || (0 == year1 % 400))
+        tot_diff_days=366 - days_to_sub - date1;
+
+        else
+        tot_diff_days=365 - days_to_sub - date1;
+
+        console.log(tot_diff_days)
+        
+        year_diff=year2 - year1
+        //console.log(year_diff)
+
+        for(i=1;i<=year_diff;i++)
+        {
+            year_loop=year1+i;
+            console.log(year_loop);
+            if(year_loop == year2)
+            {
+                tot_diff_days= tot_diff_days + days_to_add + date2
+                console.log(tot_diff_days)
+            }
+            else if((0 == year_loop % 4) && (0 != year_loop % 100) || (0 == year_loop % 400))
+            {
+                tot_diff_days=tot_diff_days+ 366;
+            }
+            else
+            {
+                tot_diff_days=tot_diff_days+ 365;
+                console.log(tot_diff_days)
+            }
+
+        }
+
+        console.log(tot_diff_days);
+
+        var res_y=0
+        var res_m=0
+        var res_d=0
+
+        while(tot_diff_days){
+      if(tot_diff_days >= 365){
+        res_y++;
+         tot_diff_days -= 365;
+      }else if(tot_diff_days >= 30){
+        res_m++;
+         tot_diff_days -= 30;
+      
+      }
+      else
+      {
+        res_d++;
+         tot_diff_days--;
+      }
+     }
+      result_YMD=res_y+' '+res_m+' '+res_d
+      console.log(result_YMD)
+
+        }
+
+       // Time difference calculation
+            hr1=dt1.getHours();
+            min1=dt1.getMinutes(); // get the month starts from 0
+            sec1=dt1.getSeconds();
+
+            time1=hr1+':'+min1+':'+sec1
+            var a = time1.split(':');
+            var t1_sec= (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2]);
+            console.log(t1_sec);
+
+            hr2=dt2.getHours(); //
+            min2=dt2.getMinutes(); // 
+            sec2=dt2.getSeconds();
+
+            time2=hr2+':'+min2+':'+sec2
+            var b = time2.split(':');
+            var t2_sec= (+b[0]) * 60 * 60 + (+b[1]) * 60 + (+b[2]);
+            console.log(t2_sec);
+
+            time_diff_sec_val=t1_sec - t2_sec;
+            time_diff_sec=convert_positive(time_diff_sec_val);
+            console.log(time_diff_sec);
+
+            //Convert diff to hr min sec
+            hours = Math.floor(time_diff_sec / 3600);
+            time_diff_sec %= 3600;
+                minutes = Math.floor(time_diff_sec / 60);
+                seconds = time_diff_sec % 60;
+
+                //console.log(hours);
+                //console.log(minutes);
+                //console.log(seconds);
+
+                diff_HMS="Years= "+res_y+" Month= "+res_m+" Days= "+res_d+'  '+hours+':'+minutes+':'+seconds
+
+                document.getElementById("result").innerHTML= diff_HMS;
+
+
+    }
+
+
+</script>
+</head>
+<body>
+
+<div  >
+<h1 >Date Difference</h1>
+
+</p><br>
+        
+      <input type="text" id="inputval1" name="inputval1" placeholder="YYYY/MM/DD h:m:s" value="" class="input"><br><br>
+      <input type="text" id="inputval2" name="inputval2" placeholder="YYYY/MM/DD, h:m:s" value=""><br>
+  
+      <p id="result" style="font-size:20px;"></p><br>
+
+   
+  
+
+<button class="button button1" onclick="compare();">Claculate Difference</button>
+
+</div>
+
+</body>
+</html>

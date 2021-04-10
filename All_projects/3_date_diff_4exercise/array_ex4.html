@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+    input[type=text] {
+  width: 30%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 3px solid #ccc;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+  outline: none;
+}
+
+input[type=text]:focus {
+  border: 3px solid #555;
+} 
+   .button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+   .button5 {background-color: #555555;}
+</style>
+<script>
+    function convert_dt()
+    {
+        str=document.getElementById("inputval1").value
+        console.log(str)
+        dt_obj= new Date(str)
+        days_arr=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
+        yr=dt_obj.getFullYear(); // get the year value form date
+        console.log(yr)
+
+        var month = new Array();
+        month[0] = "January";
+        month[1] = "February";
+        month[2] = "March";
+        month[3] = "April";
+        month[4] = "May";
+        month[5] = "June";
+        month[6] = "July";
+        month[7] = "August";
+        month[8] = "September";
+        month[9] = "October";
+        month[10] = "November";
+        month[11] = "December";
+        month1= month[dt_obj.getMonth()]; // 
+
+        dt=dt_obj.getDate()
+        console.log(dt)
+        console.log(month1)
+        console.log(yr)
+
+        if(dt==1)
+        {
+            ser='st';
+        }
+        if(dt==1 || dt==21|| dt==31)
+        {
+            ser='st';
+        }
+        if(dt==2 || dt==22)
+        {
+            ser='nd';
+        }
+        if(dt==03 || dt==23)
+        {
+            ser='rd';
+        }
+        if((dt > 4 && dt <20) || (dt > 24 && dt <30) )
+        {
+            ser='th';
+        }
+
+        result= dt+ser +' '+month1+','+yr
+        document.getElementById("result").innerHTML= result;
+        //console.log(result)
+
+
+        
+
+    }
+</script>
+</head>
+<body>
+
+<h1>Date Description</h1>
+
+</p><br>
+      <input type="text" id="inputval1" name="inputval1" placeholder="mm-dd-YYYY" value=""><br><br>
+     
+  
+
+<button class=" button button5" onclick="convert_dt();">Convert Date</button>
+
+<p id="result" style="font-size:40px;"><b></b><b></b></p>
+
+
+
+</body>
+</html>

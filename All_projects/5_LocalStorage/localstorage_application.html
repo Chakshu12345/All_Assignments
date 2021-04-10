@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./localstorage_application_validation.js"></script>
+    <script src="./localstorage_dynamic_ui.js"></script>
+    <script>
+    var validate;
+    validate= new ValidateForm();
+    dynamic_ui= new generateDynamicUI();
+    window.onload = function(){
+        var product = {
+            ProductId:'',
+            ProductName:'',
+            CategoryName:'',
+            Manufacturer:'',
+            Description:'',
+            Price:''
+        };
+
+    document.getElementById('p_id').addEventListener('focusout',function(){
+        var p_id= document.getElementById('p_id').value
+
+        validate.checkNumeric(p_id)
+        validate.checkIdRepetationLS(p_id)
+    },false);
+
+
+
+        document.getElementById('btnsave').addEventListener('click',function(){
+            //console.log("hi");
+            p_id = document.getElementById('p_id').value
+
+            //alert(p_id)
+            console.log(localStorage);
+            //alert(localStorage.length)
+            if(localStorage.length==0)
+            max_val=1
+
+            else
+            max_val=localStorage.length + 1
+
+            product.ProductId = document.getElementById('p_id').value;
+            product.ProductName = document.getElementById('p_name').value;
+            product.CategoryName = document.getElementById('r1').value;
+            product.Manufacturer = document.getElementById('m1').value;
+            product.Description = document.getElementById('desc').value;
+            product.Price = document.getElementById('price').value;
+            
+            // save data in localStorage      
+            localStorage.setItem("product-"+ max_val,JSON.stringify(product));
+        },false);
+
+        document.getElementById('btnload').addEventListener('click',function(){
+        
+        var data = [];
+        
+        for(var i=1; i<=localStorage.length;i++) {
+            data.push(JSON.parse(localStorage.getItem('product-'+i)));
+        }
+        
+        //parse_arr=[]
+        console.log(data.length)
+        
+        //console.log(data.toString);
+        
+        //var headers = Object.keys(JSON.parse(data[1]))
+        //console.log(headers);
+
+        document.getElementById('dvData1').innerHTML = JSON.stringify(data);
+           
+        console.log(data)
+        
+        document.getElementById('dvData').innerHTML = dynamic_ui.table(data) ;
+        },false);
+
+        //search functionality
+    document.getElementById('search').addEventListener('keyup',function(){
+        var data = [];
+        var key_arr= [];
+        search_val=document.getElementById('search').value
+        console.log(search_val)
+        for(var i=1; i<=localStorage.length;i++) {
+            //data.push(JSON.parse(localStorage.getItem('product-'+i)));
+            search_in=JSON.parse(localStorage.getItem('product-'+i))
+            //console.log(search_in)
+            for(p in search_in)
+            {
+                
+                //console.log(val1)
+                if(search_in[p].match(search_val))
+                {
+                    if(key_arr.includes('product-'+i)== false)
+                    {
+                        key_arr.push('product-'+i)
+                    }                   
+                }
+            }
+        }
+
+        for(i=0;i<key_arr.length;i++)
+        {
+            data.push(JSON.parse(localStorage.getItem(key_arr[i])));
+        }
+
+        //
+        document.getElementById('dvData').innerHTML = dynamic_ui.table(data) ;
+       
+
+        });
+       
+
+        
+
+        //Load data
+    
+
+    document.getElementById('btndelete').addEventListener('click',function(){
+            localStorage.clear(); // clear the storage
+            // localStorage.removeItem(); // delete item for specific key
+        },false);
+
+    }
+    </script>
+
+<style>
+    #customers {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    }
+
+    #customers td, #customers th {
+    border: 1px solid #ddd;
+    padding: 8px;
+    }
+
+    #customers tr:nth-child(even){background-color: #f2f2f2;}
+
+    #customers tr:hover {background-color: #ddd;}
+
+    #customers th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #0e586b;
+    color: white;
+    }
+
+    input[type=text], select {
+    width: 30%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    }
+    div {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+    }
+
+    .button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    }
+    .button1 {background-color: #4CAF50;} /* Green */
+    .button2 {background-color: #008CBA;} /* Blue */
+    .button4 {background-color: #e7e7e7; color: black;} /* Gray */
+    .button5 {background-color: #0e586b;} /* Black */
+
+
+</style>
+</head>
+<body>
+    <h1>Local Storage</h1>
+    <div>
+        <tr>
+            <td><label>ProductId</label></td><td></td>
+            <td><input type="text" id="p_id" name="p_id"></td>
+        </tr><br><br>
+
+        <tr></tr>
+    
+        <tr>
+            <td><label>Product Name</label></td>
+            <td>
+            <input type="text" id="p_name" name="p_name">
+            </td>
+        </tr><br><br>
+        
+    
+        
+       <tr>
+        <td><label>CategoryName</label></td>
+        
+        <td>
+        <input type="radio" id="r1" name="ECT" value="ECT">ECT
+        <input type="radio" id="r1" name="ECL" value="ECL">ECL
+        <input type="radio" id="r1" name="FOD-FAST" value="FOD-FAST">FOD-FAST
+        <input type="radio" id="r1" name="FOD-DRK" value="FOD-DRK">FOD-DRK
+         </td>
+        </tr>
+        <br><br>
+
+        <tr>
+        <td>
+        <label>Manufacturer</label>
+        </td>
+        <td>
+        <input type="radio" id="m1" name="HP">HP
+        <input type="radio" id="m1" name="IBM">IBM
+        <input type="radio" id="m1" name="TATA">TATA
+        <input type="radio" id="m1" name="BAJAJ">BAJAJ
+        <input type="radio" id="m1" name="PARLE">PARLE
+        </td>
+    </tr>
+    <br><br>
+   
+    <tr>
+        <td>
+            <label>Description</label>
+        </td>
+
+        <td>
+            <textarea type="text" id="desc" style="width:30%; height:30%"></textarea>
+        </td>
+    </tr>
+
+    <br><br>
+    
+    <tr>
+        <td>
+        <label>Price</label>
+        </td>
+        <td>
+        <input type="text" id="price" >
+        </td>
+    </tr>
+    <br><br>
+
+    <tr>
+        <td>
+        <input type="button" value="Save" id="btnsave" class=" button button5">
+        <input type="button" value="Load" id="btnload" class=" button button5">
+        <input type="button" value="Clear" id="btnclear" class="button button5">
+        <input type="button" value="Delete" id="btndelete" class=" button button5">
+    </td>
+    </tr>
+    
+    </div>
+    <hr>
+    <div id="dvData1"></div>
+    <label><b>Search</b></label>
+    <input type="search" name="search" id="search" >
+    <div id="dvData"></div>
+</body>
+</html>
